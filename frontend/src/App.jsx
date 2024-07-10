@@ -7,7 +7,7 @@ const urlBaseServer = "http://localhost:3000";
 
 function App() {
   const [titulo, setTitulo] = useState("");
-  const [img, setImg] = useState("");
+  const [imgSrc, setImgSRC] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [posts, setPosts] = useState([]);
 
@@ -17,7 +17,7 @@ function App() {
   };
 
   const agregarPost = async () => {
-    const post = { titulo, img, descripcion };
+    const post = { titulo, url: imgSrc, descripcion };
     await axios.post(urlBaseServer + "/posts", post);
     getPosts();
   };
@@ -45,7 +45,7 @@ function App() {
         <div className="col-12 col-sm-4">
           <Form
             setTitulo={setTitulo}
-            setImg={setImg}
+            setImgSRC={setImgSRC}
             setDescripcion={setDescripcion}
             agregarPost={agregarPost}
           />

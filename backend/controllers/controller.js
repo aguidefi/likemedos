@@ -9,9 +9,9 @@ const notFound = (req, res) => {
 };
 
 const addPost = async (req, res) => {
-  const {titulo, img, descripcion, likes} = req.body;
+  const {titulo, url, descripcion, likes} = req.body;
   try {
-    const response = await models.addPost(titulo, img, descripcion, likes)
+    const response = await models.addPost(titulo, url, descripcion, likes)
     res.status(201).send('Post added successfully')
   } catch (error) {
     res.status(500).send(error.message);
@@ -38,14 +38,14 @@ const editPosts = async (req, res) => {
   }
 };
 
-const toggleHeart = async (req, res) => {
+const numberLikes = async (req, res) => {
   try {
     const {id} = req.params;
-    const post = await models.getPostById(id);  
+    const post = await models.getLikeById(id);  
     if (!post) {
       return res.status(404).send('Post not found');
     }
-    const newLikes = post.likes === 0 ? 1 : 0; 
+    const newLikes = post.likes === 0 ? 1 : post.likes + 1; 
 
     await models.likePost(newLikes, id);
     res.status(200).send(`Post ${newLikes === 1 ? 'liked' : 'unliked'} successfully`);
@@ -71,6 +71,6 @@ export const controllers = {
   editPosts,
   home,
   notFound,
-  toggleHeart,
+  numberLikes,
   deletePost
 }

@@ -44,15 +44,15 @@ const likePost = async (likes, id) => {
   try {
     const response = await pool.query(query, values);
     if(response.rowCount > 0){
-      return response.rows;
+      return response;
     }
   } catch (error){
     console.log('Error', error.code, 'Error message', error.message);
   }
 }
 
-const getPostById = async (id) => {
-  const query = 'SELECT * FROM posts WHERE id = $1';
+const getLikeById = async (id) => {
+  const query = 'SELECT likes FROM posts WHERE id = $1';
   const values = [id];
   try {
     const response = await pool.query(query, values);
@@ -82,7 +82,7 @@ export const models = {
   getPosts,
   addPost,
   editPosts,
-  getPostById,
+  getLikeById,
   likePost,
   deletePost
 }

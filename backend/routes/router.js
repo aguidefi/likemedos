@@ -11,7 +11,7 @@ router.get("/posts/", controllers.getPosts);
 
 router.put('/posts/:id', controllers.editPosts);
 
-router.put('/posts/like/:id', controllers.toggleHeart);
+router.put('/posts/like/:id', controllers.numberLikes);
 
 router.delete('/posts/:id', controllers.deletePost);
 
