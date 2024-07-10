@@ -25,9 +25,22 @@ const getPosts = async ()=>{
   }
 }
 
-const likePost = async (titulo, img, descripcion, likes, id) => {
-  const query = "UPDATE posts SET titulo=$1, img=$2, descripcion=$3, likes=$4 WHERE id=$5 RETURNING *";
+const editPosts = async (titulo, img, descripcion, likes, id) => {
+  const query = "UPDATE posts SET titulo = $1, img = $2, descripcion = $3, likes = $4 WHERE id = $5";
   const values = [titulo, img, descripcion, likes, id];
+  try {
+    const response = await pool.query(query);
+    if(response.rowCount > 0){
+      return response;
+    }
+  } catch (error) {
+    console.log('Error', error.code, 'Error message', error.message);
+  }
+};
+
+const likePost = async (likes, id) => {
+  const query = "UPDATE posts SET likes=$1 WHERE id=$2";
+  const values = [likes, id];
   try {
     const response = await pool.query(query, values);
     if(response.rowCount > 0){
@@ -37,6 +50,20 @@ const likePost = async (titulo, img, descripcion, likes, id) => {
     console.log('Error', error.code, 'Error message', error.message);
   }
 }
+
+const getPostById = async (id) => {
+  const query = 'SELECT * FROM posts WHERE id = $1';
+  const values = [id];
+  try {
+    const response = await pool.query(query, values);
+    if(response.rowCount > 0){
+      return response.rows[0];
+    }
+  } catch (error) {
+    console.log('Error', error.code, 'Error message', error.message);
+  }
+};
+
 
 const deletePost = async (id) => {
   const query = "DELETE FROM posts WHERE id=$1";
@@ -54,6 +81,8 @@ const deletePost = async (id) => {
 export const models = {
   getPosts,
   addPost,
+  editPosts,
+  getPostById,
   likePost,
   deletePost
 }

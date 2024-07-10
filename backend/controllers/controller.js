@@ -27,16 +27,33 @@ const getPosts = async (req, res) =>{
   }
 };
 
-const likePost = async (req, res) => {
-  const {id} = req.params;
-  const {titulo, img, descripcion, likes} = req.body;
+const editPosts = async (req, res) => {
   try {
-    const response = await models.likePost(titulo, img, descripcion, likes, id);
-    res.status(200).json(response);
+    const {id } = req.params
+    const { titulo, img, descripcion, likes } = req.body;
+    const response = await models.editPosts(titulo, img, descripcion, likes, id);
+    res.status(200).send('Post edited');
   } catch (error) {
     res.status(500).send(error.message);
   }
 };
+
+const toggleHeart = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const post = await models.getPostById(id);  
+    if (!post) {
+      return res.status(404).send('Post not found');
+    }
+    const newLikes = post.likes === 0 ? 1 : 0; 
+
+    await models.likePost(newLikes, id);
+    res.status(200).send(`Post ${newLikes === 1 ? 'liked' : 'unliked'} successfully`);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 
 const deletePost = async (req, res) => {
   const {id} = req.params;
@@ -51,8 +68,9 @@ const deletePost = async (req, res) => {
 export const controllers = {
   addPost,
   getPosts,
+  editPosts,
   home,
   notFound,
-  likePost,
+  toggleHeart,
   deletePost
 }

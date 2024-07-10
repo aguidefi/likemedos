@@ -5,13 +5,15 @@ const router = express.Router();
 
 router.get('/', controllers.home);
 
-router.post('/post/', controllers.addPost);
+router.post('/posts/', controllers.addPost);
 
 router.get("/posts/", controllers.getPosts);
 
-router.put('/posts/like/:id', controllers.likePost);
+router.put('/posts/:id', controllers.editPosts);
 
-router.delete('/post/:id', controllers.deletePost);
+router.put('/posts/like/:id', controllers.toggleHeart);
+
+router.delete('/posts/:id', controllers.deletePost);
 
 router.get('*', controllers.notFound);
 
